@@ -8,6 +8,8 @@ use serde::{Deserialize, Serialize};
 
 const HOST: &str = "host";
 const IP: &str = "ip";
+const SUBJECTS: &str = "subjects";
+
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize, Serialize)]
 struct Lookup {
@@ -61,14 +63,14 @@ fn main() {
     )
     .arg(
         Arg::with_name(IP)
-            .short("ip")
+            .short(IP)
             .long(IP)
             .required(false)
             .takes_value(false)
             .help(IP)
     )
     .arg(
-        Arg::with_name("subjects")
+        Arg::with_name(SUBJECTS)
             .global(true)
             .min_values(1)
             .multiple(true),
@@ -76,7 +78,7 @@ fn main() {
     .get_matches();
 
     let resolver = Resolver::new(ResolverConfig::default(), ResolverOpts::default()).unwrap();
-    let subjects: Vec<String>  = match matches.values_of("subjects") {
+    let subjects: Vec<String>  = match matches.values_of(SUBJECTS) {
         Some(values) => values.map(|ln| ln.to_string()).collect(),
         None => io::stdin().lock().lines().map(|ln| ln.unwrap()).collect(),
     };
