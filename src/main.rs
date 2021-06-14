@@ -47,7 +47,7 @@ fn main() {
             .short("o")
             .long("output")
             .takes_value(true)
-            .help("table or json output")
+            .help("table, json, limited output")
             .default_value("table")
             .env("LOOKUP_OUTPUT"),
     )
@@ -124,9 +124,8 @@ fn main() {
 
     match matches.value_of("output").unwrap() {
         "json" => println!("{}", serde_json::to_string(&lookups).unwrap()),
-        "table" => {
-            print_as_table(lookups);
-        }
+        "table" => print_as_table(lookups),
+        "limited" => lookups.iter().for_each(|l| println!("{}", l.value)),
         _ => unreachable!(),
     }
 }
